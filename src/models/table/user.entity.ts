@@ -1,5 +1,6 @@
 import { IsNotEmptyString } from 'src/decorators/is-not-empty-string.decorator';
 import {
+  Unique,
   Column,
   Entity,
   PrimaryGeneratedColumn,
@@ -11,6 +12,7 @@ import { TimeColumns } from '../common/time-columns';
 import { IsStrongPasswordCustom } from 'src/decorators/is-strong-password.decorator';
 
 @Entity()
+@Unique(['email'])
 export class User extends TimeColumns {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
@@ -19,10 +21,10 @@ export class User extends TimeColumns {
   @Column('varchar', { nullable: false })
   public email: string;
 
-  @IsStrongPasswordCustom(10, {
+  @IsStrongPasswordCustom(8, {
     message: 'please enter valid password',
   })
-  @Column({ select: false })
+  @Column()
   public password: string;
 
   @IsNotEmptyString(1, 50)
