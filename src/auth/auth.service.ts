@@ -3,24 +3,21 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { SignInDto } from 'src/models/dto/sign-in.dto';
-import { User } from 'src/models/table/user.entity';
-import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
   async signIn(signInDto: SignInDto): Promise<Record<string, any>> {
     const { email, password } = signInDto;
 
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userService.findOneByEmail(email);
 
     if (!user) {
       throw new NotFoundException();
