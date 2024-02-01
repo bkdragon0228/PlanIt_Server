@@ -1,4 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { SignInDto } from 'src/models/dto/sign-in.dto';
 import { AuthService } from './auth.service';
 import { IsPublic } from 'src/decorators/is-public.decorator';
@@ -6,6 +12,7 @@ import { CreateUserDto } from 'src/models/dto/creat-user.dto';
 import { User } from 'src/models/table/user.entity';
 
 @Controller('auth')
+@UsePipes(ValidationPipe)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
