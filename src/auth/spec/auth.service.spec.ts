@@ -2,7 +2,12 @@ import { Test } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from 'src/models/table/user.entity';
 
 describe('AuthService', () => {
@@ -18,6 +23,7 @@ describe('AuthService', () => {
           provide: UserService,
           useValue: {
             findOneByEmail: jest.fn(),
+            create: jest.fn(),
           },
         },
         {
@@ -80,6 +86,41 @@ describe('AuthService', () => {
 
       expect(result).toHaveProperty('access_token');
       expect(result['access_token']).toBe('testAccessToken');
+    });
+  });
+
+  describe('signUp', () => {
+    it('이미 존재하는 email로 가입 요청을 하면 ConflictException 예외를 던진다.', async () => {
+      const signUpDto = {
+        email: 'user@gmail.com',
+        password: 'userPassword',
+        username: 'user1',
+      };
+
+      const user = new User();
+      user.email = 'user@gmail.com';
+
+      jest.spyOn(userService, 'findOneByEmail').mockResolvedValue(user);
+
+      await expect(authService.signUp(signUpDto)).rejects.toThrow(
+        ConflictException,
+      );
+    });
+
+    it('올바른 데이터로 가입 요청을 하면 생성된 유저 정보를 반환한다.', async () => {
+      const user = new User();
+      user.id = '1';
+      user.email = 'user@gmail.com';
+      user.password = 'userPassword';
+
+      jest.spyOn(userService, 'findOneByEmail').mockResolvedValue(null);
+      jest.spyOn(userService, 'create').mockResolvedValue(user);
+
+      const result = await authService.signUp(user);
+
+      expect(result['id']).toBe('1');
+      expect(result['email']).toBe('user@gmail.com');
+      expect(result['password']).toBe('userPassword');
     });
   });
 });

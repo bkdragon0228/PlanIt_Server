@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -6,6 +7,8 @@ import {
 import { SignInDto } from 'src/models/dto/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/models/dto/creat-user.dto';
+import { User } from 'src/models/table/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -32,5 +35,19 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async signUp(createUserDto: CreateUserDto): Promise<User> {
+    const { email, password, username } = createUserDto;
+
+    const user = await this.userService.findOneByEmail(email);
+
+    if (user) {
+      throw new ConflictException();
+    }
+
+    const newUser = await this.userService.create(createUserDto);
+
+    return newUser;
   }
 }
