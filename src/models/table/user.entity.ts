@@ -7,9 +7,11 @@ import {
   AfterInsert,
   AfterUpdate,
   AfterRemove,
+  OneToMany,
 } from 'typeorm';
 import { TimeColumns } from '../common/time-columns';
 import { IsStrongPasswordCustom } from 'src/decorators/is-strong-password.decorator';
+import { Work } from './work.entity';
 
 @Entity()
 @Unique(['email'])
@@ -30,6 +32,9 @@ export class User extends TimeColumns {
   @IsNotEmptyString(1, 50)
   @Column()
   public username: string;
+
+  @OneToMany(() => Work, (work) => work.user)
+  works: Work[];
 
   @AfterInsert()
   logInsert() {
