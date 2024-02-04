@@ -3,35 +3,36 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TimeColumns } from '../common/time-columns';
 import { User } from './user.entity';
-import { IsNotEmptyString } from 'src/decorators/is-not-empty-string.decorator';
-import { WorkStatus } from '../common/work-status';
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { Planet } from './planet.entity';
+import { IsNotEmpty } from 'class-validator';
+import { Avatar } from './avatar.entity';
 
 @Entity()
-export class Work extends TimeColumns {
+export class UserPlanet extends TimeColumns {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
-  @IsNotEmptyString(1, 15)
+  @IsNotEmpty()
   @Column()
-  public title: string;
+  public userId: string;
 
   @IsNotEmpty()
   @Column()
   public planetId: string;
 
-  @IsNotEmptyString(1, 50)
-  @Column()
-  public description: string;
+  @OneToOne(() => Avatar, { cascade: true })
+  @JoinColumn()
+  public avatar: Avatar;
 
-  @Column()
-  @IsEnum(WorkStatus)
-  public status: WorkStatus;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  public user: User;
 
   @ManyToOne(() => Planet)
   @JoinColumn({ name: 'planetId', referencedColumnName: 'id' })

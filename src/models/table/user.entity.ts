@@ -12,6 +12,7 @@ import {
 import { TimeColumns } from '../common/time-columns';
 import { IsStrongPasswordCustom } from 'src/decorators/is-strong-password.decorator';
 import { Work } from './work.entity';
+import { UserPlanet } from './user-planet.entity';
 
 @Entity()
 @Unique(['email'])
@@ -33,8 +34,8 @@ export class User extends TimeColumns {
   @Column()
   public username: string;
 
-  @OneToMany(() => Work, (work) => work.user)
-  works: Work[];
+  @OneToMany(() => UserPlanet, (userPlanet) => userPlanet.user)
+  userPlants: UserPlanet[];
 
   @AfterInsert()
   logInsert() {
