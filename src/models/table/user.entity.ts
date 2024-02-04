@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 import { TimeColumns } from '../common/time-columns';
 import { IsStrongPasswordCustom } from 'src/decorators/is-strong-password.decorator';
-import { Work } from './work.entity';
 import { UserPlanet } from './user-planet.entity';
 
 @Entity()
