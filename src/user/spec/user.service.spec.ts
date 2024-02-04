@@ -119,4 +119,26 @@ describe('UserService', () => {
       expect(result).toEqual(user);
     });
   });
+
+  describe('checkDuplicateEmail', () => {
+    it('이미 있는 이메일을 제공한 경우 true를 반환한다.', async () => {
+      const duplicateEmail = 'duplicateEmail@test.com';
+      const user = new User();
+      user.email = duplicateEmail;
+
+      jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(user);
+
+      const result = await userService.checkDuplicateEmail(duplicateEmail);
+
+      expect(result).toBe(true);
+    });
+    it('존재 하지 않는 이메일을 제공한 경우 false 반환한다.', async () => {
+      const notDuplicateEmail = 'notDuplicateEmail@test.com';
+      jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(null);
+
+      const result = await userService.checkDuplicateEmail(notDuplicateEmail);
+
+      expect(result).toBe(false);
+    });
+  });
 });
