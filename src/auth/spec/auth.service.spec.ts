@@ -23,6 +23,7 @@ describe('AuthService', () => {
           provide: UserService,
           useValue: {
             findOneByEmail: jest.fn(),
+            getOneByEmail: jest.fn(),
             create: jest.fn(),
           },
         },
@@ -100,7 +101,7 @@ describe('AuthService', () => {
       const user = new User();
       user.email = 'user@gmail.com';
 
-      jest.spyOn(userService, 'findOneByEmail').mockResolvedValue(user);
+      jest.spyOn(userService, 'getOneByEmail').mockResolvedValue(user);
 
       await expect(authService.signUp(signUpDto)).rejects.toThrow(
         ConflictException,
@@ -113,7 +114,7 @@ describe('AuthService', () => {
       user.email = 'user@gmail.com';
       user.password = 'userPassword';
 
-      jest.spyOn(userService, 'findOneByEmail').mockResolvedValue(null);
+      jest.spyOn(userService, 'getOneByEmail').mockResolvedValue(null);
       jest.spyOn(userService, 'create').mockResolvedValue(user);
 
       const result = await authService.signUp(user);

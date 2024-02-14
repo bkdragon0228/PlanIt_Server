@@ -20,7 +20,12 @@ export class UserService {
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({
+      where: { email },
+      relations: {
+        userPlants: true,
+      },
+    });
 
     if (!user) {
       throw new NotFoundException();
@@ -30,7 +35,10 @@ export class UserService {
   }
 
   async findUserById(id: string): Promise<User> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOne({
+      where: { id },
+      relations: { userPlants: true },
+    });
   }
 
   async updateUserById(
@@ -62,5 +70,16 @@ export class UserService {
       where: { email },
     });
     return !!existingUser;
+  }
+
+  async getOneByEmail(email: string): Promise<User | null> {
+    const user = await this.userRepository.findOne({
+      where: { email },
+      relations: {
+        userPlants: true,
+      },
+    });
+
+    return user ?? null;
   }
 }

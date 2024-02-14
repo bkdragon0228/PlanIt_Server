@@ -40,7 +40,7 @@ export class AuthService {
   async signUp(createUserDto: CreateUserDto): Promise<User> {
     const { email, password, username } = createUserDto;
 
-    const user = await this.userService.findOneByEmail(email);
+    const user = await this.userService.getOneByEmail(email);
 
     if (user) {
       throw new ConflictException();
