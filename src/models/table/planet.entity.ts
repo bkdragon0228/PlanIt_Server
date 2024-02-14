@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TimeColumns } from '../common/time-columns';
 import { IsNotEmptyString } from 'src/decorators/is-not-empty-string.decorator';
+import { Work } from './work.entity';
 
 @Entity()
 export class Planet extends TimeColumns {
@@ -13,5 +14,8 @@ export class Planet extends TimeColumns {
 
   @Column()
   @IsNotEmptyString(1, 50)
-  public desciption: string;
+  public description: string;
+
+  @OneToMany(() => Work, (work) => work.planet, { cascade: ['remove'] })
+  works: Work[];
 }

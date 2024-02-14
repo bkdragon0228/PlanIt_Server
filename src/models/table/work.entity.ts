@@ -6,10 +6,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TimeColumns } from '../common/time-columns';
-import { User } from './user.entity';
 import { IsNotEmptyString } from 'src/decorators/is-not-empty-string.decorator';
 import { WorkStatus } from '../common/work-status';
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 import { Planet } from './planet.entity';
 
 @Entity()
