@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { WorkModule } from './work/work.module';
+import { PlanetModule } from './planet/planet.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WorkModule } from './work/work.module';
     UserModule,
     AuthModule,
     WorkModule,
+    PlanetModule,
   ],
   // controllers: [],
   providers: [
