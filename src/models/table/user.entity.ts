@@ -9,6 +9,7 @@ import {
   AfterRemove,
   OneToMany,
 } from 'typeorm';
+import { Exclude, Expose } from 'class-transformer';
 import { TimeColumns } from '../common/time-columns';
 import { IsStrongPasswordCustom } from 'src/decorators/is-strong-password.decorator';
 import { UserPlanet } from './user-planet.entity';
@@ -16,10 +17,12 @@ import { UserPlanet } from './user-planet.entity';
 @Entity()
 @Unique(['email'])
 export class User extends TimeColumns {
+  @Expose()
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
   @IsNotEmptyString(1, 50)
+  @Expose()
   @Column('varchar', { nullable: false })
   public email: string;
 
@@ -27,12 +30,15 @@ export class User extends TimeColumns {
     message: 'please enter valid password',
   })
   @Column()
+  @Expose()
   public password: string;
 
   @IsNotEmptyString(1, 50)
+  @Expose()
   @Column()
   public username: string;
 
+  @Expose()
   @OneToMany(() => UserPlanet, (userPlanet) => userPlanet.user)
   userPlants: UserPlanet[];
 
