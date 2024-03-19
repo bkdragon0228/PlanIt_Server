@@ -11,7 +11,6 @@ import { TimeColumns } from '../common/time-columns';
 import { User } from './user.entity';
 import { Planet } from './planet.entity';
 import { IsNotEmpty } from 'class-validator';
-import { Avatar } from './avatar.entity';
 
 @Entity()
 export class UserPlanet extends TimeColumns {
@@ -26,11 +25,13 @@ export class UserPlanet extends TimeColumns {
   @Column()
   public planetId: string;
 
-  @OneToOne(() => Avatar, { cascade: true })
-  @JoinColumn()
-  public avatar: Avatar;
+  @Column({ nullable: true })
+  public avatarUrl: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.userPlants, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   public user: User;
 
