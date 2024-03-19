@@ -35,10 +35,15 @@ export class UserService {
   }
 
   async findUserById(id: string): Promise<User> {
-    return this.userRepository.findOne({
+    const user = this.userRepository.findOne({
       where: { id },
       relations: { userPlants: true },
     });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   async updateUserById(

@@ -10,6 +10,7 @@ import { WorkModule } from './work/work.module';
 import { PlanetModule } from './planet/planet.module';
 import { LoggingMiddleware } from './middlewares/logging.middleware';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { UserPlanetModule } from './user-planet/user-planet.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
     AuthModule,
     WorkModule,
     PlanetModule,
+    UserPlanetModule,
   ],
   // controllers: [],
   providers: [
